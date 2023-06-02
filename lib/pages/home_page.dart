@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       body: SafeArea(
           child: Column(
-        children: [Text("Hellow Wordls")],
+        children: [Text("Hello World")],
       )),
     );
   }
