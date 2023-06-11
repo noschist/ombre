@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ombre/pages/screens/intro_login.dart';
+import 'package:ombre/pages/register_page.dart';
 import 'package:ombre/pages/screens/intro_one.dart';
 import 'package:ombre/pages/screens/intro_two.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -37,42 +37,75 @@ class _OnboardingPageState extends State<OnboardingPage> {
             children: const [IntroOne(), IntroTwo()],
           ),
           Container(
-            alignment: const Alignment(0, 0.32),
+            alignment: const Alignment(-0.88, 0.4),
             child: SmoothPageIndicator(
               onDotClicked: (index) {
                 _controller.jumpToPage(index);
               },
               controller: _controller,
               count: 2,
-              effect: const WormEffect(type: WormType.underground),
+              effect: const WormEffect(
+                  type: WormType.underground,
+                  radius: 8,
+                  dotHeight: 8,
+                  dotWidth: 8),
             ),
           ),
           Padding(
-              padding: EdgeInsets.all(30.r),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 40.w, vertical: 15.h),
-                      backgroundColor: const Color.fromARGB(255, 0, 80, 172)),
+              padding: EdgeInsets.symmetric(horizontal: 25.h, vertical: 105.w),
+              child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                      minimumSize: Size.fromHeight(70.h),
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      foregroundColor: Colors.white,
+                      backgroundColor: const Color(0xFF2438a4)),
+                  onPressed: () {},
+                  child: Text(
+                    "Login",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 17.sp),
+                  ))),
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25.h, vertical: 20.w),
+              child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size.fromHeight(70.h),
+                    side:
+                        const BorderSide(width: 2.0, color: Color(0xFF2438a4)),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    foregroundColor: const Color(0xFF2438a4),
+                  ),
                   onPressed: () {
-                    if (reachedLoginPage) {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const IntroLogin();
-                      }));
-                    } else {
-                      _controller.nextPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn);
-                    }
+                    Navigator.of(context).push(_createRoute());
                   },
                   child: Text(
-                    reachedLoginPage ? "Create Account" : "Get Started",
-                    style: TextStyle(fontSize: 18.sp),
-                  )))
+                    "Create Account",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 17.sp),
+                  ))),
         ],
       ),
     );
   }
+}
+
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        const RegisterPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(1.0, 0.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
