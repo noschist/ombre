@@ -1,4 +1,4 @@
-package com.example.ombre
+package com.noschist.ombre
 
 import io.flutter.embedding.android.FlutterActivity
 
