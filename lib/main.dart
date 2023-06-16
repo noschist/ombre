@@ -7,6 +7,9 @@ import 'package:ombre/pages/onboarding_page.dart';
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.white, statusBarIconBrightness: Brightness.dark));
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   runApp(const MyApp());
 }
 
@@ -21,7 +24,11 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: child,
-          theme: ThemeData(textTheme: GoogleFonts.notoSansTextTheme()),
+          theme: ThemeData(
+              textTheme: GoogleFonts.notoSansTextTheme(),
+              colorScheme: ThemeData()
+                  .colorScheme
+                  .copyWith(primary: const Color(0xFF2b38a4))),
         );
       },
       child: const OnboardingPage(),

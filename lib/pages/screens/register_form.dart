@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../util/register_pass_check.dart';
 
 class RegisterForm extends StatefulWidget {
-  const RegisterForm({super.key, required this.callback});
-
-  final Function(String, String) callback;
+  const RegisterForm({
+    super.key,
+  });
 
   @override
   State<RegisterForm> createState() => _RegisterFormState();
@@ -15,6 +15,7 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _nameEditController = TextEditingController();
   final TextEditingController _passwordEditController = TextEditingController();
+  final TextEditingController _emailEditController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isPassword12CharLong = false;
   bool _hasPassword1Num = false;
@@ -50,6 +51,7 @@ class _RegisterFormState extends State<RegisterForm> {
   void dispose() {
     _nameEditController.dispose();
     _passwordEditController.dispose();
+    _emailEditController.dispose();
     super.dispose();
   }
 
@@ -63,24 +65,17 @@ class _RegisterFormState extends State<RegisterForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Create Account",
+            "Sign Up",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36.sp),
           ),
           SizedBox(
             height: 40.h,
           ),
-          Text(
-            "Your Full Name",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.sp),
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
           TextFormField(
             textInputAction: TextInputAction.next,
             controller: _nameEditController,
             enableSuggestions: false,
-            cursorColor: const Color(0xFF2438a4),
+            cursorColor: const Color(0xFF2b38a4),
             keyboardType: TextInputType.name,
             textCapitalization: TextCapitalization.words,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -91,84 +86,120 @@ class _RegisterFormState extends State<RegisterForm> {
                 return "Please fill in your full name";
               }
             },
-            style: const TextStyle(color: Color(0xFF2438a4)),
-            decoration: InputDecoration(
-              hintText: "John Doe",
-              hintStyle: TextStyle(color: Colors.grey.shade400),
-              contentPadding: EdgeInsets.symmetric(horizontal: 20.w),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey.shade400),
-                  borderRadius: BorderRadius.circular(30.r)),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFF2438a4)),
-                  borderRadius: BorderRadius.circular(30.r)),
-              errorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFFA42424)),
-                  borderRadius: BorderRadius.circular(30.r)),
-              focusedErrorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFFA42424)),
-                  borderRadius: BorderRadius.circular(30.r)),
+            style: const TextStyle(color: Color(0xFF2b38a4)),
+            decoration: const InputDecoration(
+              prefixIcon: Icon(
+                Icons.person_3_outlined,
+              ),
+              hintText: "Full name",
+              hintStyle: TextStyle(color: Colors.grey),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFD4D4D4)),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF2b38a4)),
+              ),
+              errorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFA42424)),
+              ),
+              focusedErrorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFA42424)),
+              ),
             ),
           ),
           SizedBox(
             height: 30.h,
           ),
-          Text(
-            "Your Password",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.sp),
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
           TextFormField(
-            textInputAction: TextInputAction.done,
-            controller: _passwordEditController,
-            style: const TextStyle(color: Color(0xFF2438a4)),
-            obscureText: !_isPasswordVisible,
-            onChanged: (password) => onPasswordChanged(password),
+            textInputAction: TextInputAction.next,
+            controller: _emailEditController,
+            enableSuggestions: false,
+            cursorColor: const Color(0xFF2b38a4),
+            keyboardType: TextInputType.name,
+            textCapitalization: TextCapitalization.words,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
-              if (_isPassword12CharLong &&
-                  _hasPassword1Num &&
-                  _hasPassword1Symbol &&
-                  _hasPassword1Upper) {
+              if (RegExp(
+                      r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                  .hasMatch(value!)) {
                 return null;
               } else {
-                return "Please fulfill below criteria";
+                return "Please fill in a valid email id";
               }
             },
-            decoration: InputDecoration(
-              hintText: "minimum 12 characters",
-              hintStyle: TextStyle(color: Colors.grey.shade400),
-              contentPadding: EdgeInsets.symmetric(horizontal: 20.w),
-              suffixIcon: IconButton(
-                splashRadius: 1,
-                icon: _isPasswordVisible
-                    ? const Icon(Icons.visibility, color: Color(0xFF2438a4))
-                    : const Icon(Icons.visibility_off,
-                        color: Color(0xFFBDBDBD)),
-                onPressed: () {
-                  setState(() {
-                    _isPasswordVisible = !_isPasswordVisible;
-                  });
-                },
+            style: const TextStyle(color: Color(0xFF2b38a4)),
+            decoration: const InputDecoration(
+              prefixIcon: Icon(
+                Icons.alternate_email_rounded,
               ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey.shade400),
-                  borderRadius: BorderRadius.circular(30.r)),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFF2438a4)),
-                  borderRadius: BorderRadius.circular(30.r)),
-              errorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFFA42424)),
-                  borderRadius: BorderRadius.circular(30.r)),
-              focusedErrorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Color(0xFFA42424)),
-                  borderRadius: BorderRadius.circular(30.r)),
+              hintText: "Email ID",
+              hintStyle: TextStyle(color: Colors.grey),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFD4D4D4)),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF2b38a4)),
+              ),
+              errorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFA42424)),
+              ),
+              focusedErrorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFA42424)),
+              ),
             ),
           ),
           SizedBox(
-            height: 20.h,
+            height: 30.h,
+          ),
+          TextFormField(
+              textInputAction: TextInputAction.done,
+              controller: _passwordEditController,
+              style: const TextStyle(color: Color(0xFF2b38a4)),
+              obscureText: !_isPasswordVisible,
+              onChanged: (password) => onPasswordChanged(password),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: (value) {
+                if (_isPassword12CharLong &&
+                    _hasPassword1Num &&
+                    _hasPassword1Symbol &&
+                    _hasPassword1Upper) {
+                  return null;
+                } else {
+                  return "Please fulfill below criteria";
+                }
+              },
+              decoration: InputDecoration(
+                hintText: "Password",
+                hintStyle: const TextStyle(color: Colors.grey),
+                prefixIcon: const Icon(Icons.key_outlined),
+                suffixIcon: IconButton(
+                  splashRadius: 1,
+                  icon: _isPasswordVisible
+                      ? const Icon(Icons.visibility_outlined,
+                          color: Color(0xFF2b38a4))
+                      : const Icon(Icons.visibility_off_outlined,
+                          color: Color(0xFFBDBDBD)),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                ),
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFFD4D4D4)),
+                ),
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF2b38a4)),
+                ),
+                errorBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFFA42424)),
+                ),
+                focusedErrorBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFFA42424)),
+                ),
+              )),
+          SizedBox(
+            height: 30.h,
           ),
           passwordChecklist(
               _isPassword12CharLong, "Contains minimum 12 characters"),
@@ -186,27 +217,77 @@ class _RegisterFormState extends State<RegisterForm> {
           passwordChecklist(
               _hasPassword1Upper, "Contains atleast 1 uppercase letter"),
           SizedBox(
-            height: 30.h,
+            height: 50.h,
           ),
           OutlinedButton(
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: const Color(0xFF2438a4),
+                backgroundColor: const Color(0xFF2b38a4),
                 minimumSize: Size.fromHeight(60.h),
-                side: const BorderSide(width: 2.0, color: Color(0xFF2438a4)),
+                side: const BorderSide(color: Color(0xFF2b38a4)),
                 shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
               ),
-              onPressed: () {
-                if (_registerFormKey.currentState!.validate()) {
-                  widget.callback(
-                      _nameEditController.text, _passwordEditController.text);
-                }
-              },
+              onPressed: () {},
               child: Text(
                 "Continue",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp),
-              ))
+                style: TextStyle(fontSize: 18.sp),
+              )),
+          SizedBox(
+            height: 30.h,
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Divider(
+                  // indent: 20.0,
+                  endIndent: 12.0,
+                  thickness: 1,
+                ),
+              ),
+              Text(
+                "OR",
+                style: TextStyle(color: Colors.grey),
+              ),
+              Expanded(
+                child: Divider(
+                  indent: 12.0,
+                  // endIndent: 20.0,
+                  thickness: 1,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 30.h,
+          ),
+          OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: const Color(0xFF474747),
+                backgroundColor: const Color(0xFFf1f5f6),
+                minimumSize: Size.fromHeight(60.h),
+                side: const BorderSide(color: Color(0xFFf1f5f6)),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+              ),
+              onPressed: () {},
+              child: Row(
+                children: [
+                  Image.asset(
+                    "lib/images/google.png",
+                    width: 25.w,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        "Sign up with Google",
+                        style: TextStyle(fontSize: 18.sp),
+                      ),
+                    ),
+                  )
+                ],
+              )),
         ],
       ),
     );

@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget logoWithIcon({bool showText = false}) {
+Widget logoWithIcon({bool showText = false, int size = 35}) {
   return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: showText
           ? [
               SizedBox(
-                  width: 35.w,
-                  height: 35.h,
-                  child: Image.asset('lib/images/logo.png')),
+                  width: size.w,
+                  height: size.h,
+                  child: Image.asset(
+                    'lib/images/logo.png',
+                  )),
               SizedBox(
                 width: 5.w,
               ),
@@ -22,8 +24,8 @@ Widget logoWithIcon({bool showText = false}) {
             ]
           : [
               SizedBox(
-                  width: 35.w,
-                  height: 35.h,
+                  width: size.w,
+                  height: size.h,
                   child: Image.asset('lib/images/logo.png')),
             ]);
 }
