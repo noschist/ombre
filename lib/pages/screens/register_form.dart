@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ombre/pages/login_page.dart';
+import 'package:ombre/services/auth_methods.dart';
+import 'package:ombre/util/google_btn.dart';
+import 'package:ombre/util/primarybtn_filled.dart';
 
-import '../../util/register_pass_check.dart';
+import 'package:ombre/util/register_pass_check.dart';
+import 'package:ombre/util/slidein_anim.dart';
+import 'package:ombre/util/textbtn_login_signup.dart';
+import 'package:provider/provider.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({
@@ -64,6 +71,9 @@ class _RegisterFormState extends State<RegisterForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(
+            height: 20.h,
+          ),
           Text(
             "Sign Up",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36.sp),
@@ -80,7 +90,7 @@ class _RegisterFormState extends State<RegisterForm> {
             textCapitalization: TextCapitalization.words,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
-              if (value!.length >= 2) {
+              if (value!.isNotEmpty) {
                 return null;
               } else {
                 return "Please fill in your full name";
@@ -115,7 +125,7 @@ class _RegisterFormState extends State<RegisterForm> {
             controller: _emailEditController,
             enableSuggestions: false,
             cursorColor: const Color(0xFF2b38a4),
-            keyboardType: TextInputType.name,
+            keyboardType: TextInputType.emailAddress,
             textCapitalization: TextCapitalization.words,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
@@ -219,20 +229,7 @@ class _RegisterFormState extends State<RegisterForm> {
           SizedBox(
             height: 50.h,
           ),
-          OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: const Color(0xFF2b38a4),
-                minimumSize: Size.fromHeight(60.h),
-                side: const BorderSide(color: Color(0xFF2b38a4)),
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-              ),
-              onPressed: () {},
-              child: Text(
-                "Continue",
-                style: TextStyle(fontSize: 18.sp),
-              )),
+          primaryBtnFilled(signUpUser, "Continue"),
           SizedBox(
             height: 30.h,
           ),
@@ -241,7 +238,6 @@ class _RegisterFormState extends State<RegisterForm> {
             children: [
               Expanded(
                 child: Divider(
-                  // indent: 20.0,
                   endIndent: 12.0,
                   thickness: 1,
                 ),
@@ -253,7 +249,6 @@ class _RegisterFormState extends State<RegisterForm> {
               Expanded(
                 child: Divider(
                   indent: 12.0,
-                  // endIndent: 20.0,
                   thickness: 1,
                 ),
               ),
@@ -262,34 +257,25 @@ class _RegisterFormState extends State<RegisterForm> {
           SizedBox(
             height: 30.h,
           ),
-          OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFF474747),
-                backgroundColor: const Color(0xFFf1f5f6),
-                minimumSize: Size.fromHeight(60.h),
-                side: const BorderSide(color: Color(0xFFf1f5f6)),
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-              ),
-              onPressed: () {},
-              child: Row(
-                children: [
-                  Image.asset(
-                    "lib/images/google.png",
-                    width: 25.w,
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        "Sign up with Google",
-                        style: TextStyle(fontSize: 18.sp),
-                      ),
-                    ),
-                  )
-                ],
-              )),
+          googleBtn(context),
+          SizedBox(
+            height: 30.h,
+          ),
+          textBtnLoginOrSignUp(() {
+            Navigator.of(context)
+                .pushReplacement(createRoute(const LoginPage()));
+          }, isLoginMsg: true)
         ],
       ),
     );
+  }
+
+  void signUpUser() async {
+    if (_registerFormKey.currentState!.validate()) {
+      context.read<AuthMethods>().signUpWithEmail(
+          email: _emailEditController.text.trim(),
+          password: _passwordEditController.text.trim(),
+          context: context);
+    }
   }
 }

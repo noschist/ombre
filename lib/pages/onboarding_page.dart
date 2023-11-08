@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ombre/pages/login_page.dart';
 import 'package:ombre/pages/register_page.dart';
 
-import '../util/logo_with_icon.dart';
+import 'package:ombre/util/logo_with_icon.dart';
+import 'package:ombre/util/primarybtn_filled.dart';
+import 'package:ombre/util/slidein_anim.dart';
+import 'package:ombre/util/textbtn_login_signup.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
@@ -46,42 +50,16 @@ class OnboardingPage extends StatelessWidget {
               ),
               Column(
                 children: [
-                  TextButton(
-                      style: TextButton.styleFrom(
-                        minimumSize: Size.fromHeight(65.h),
-                        shape: const StadiumBorder(),
-                        foregroundColor: Colors.white,
-                        backgroundColor: const Color(0xFF2b38a4),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push(_createRoute());
-                      },
-                      child: Text(
-                        "Get Started",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18.sp),
-                      )),
+                  primaryBtnFilled(() {
+                    Navigator.of(context)
+                        .push(createRoute(const RegisterPage()));
+                  }, "Get Started"),
                   SizedBox(
                     height: 20.h,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Already have an account ? ",
-                        style: TextStyle(color: Color(0xFF919191)),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(_createRoute());
-                        },
-                        child: const Text(
-                          "Log In",
-                          style: TextStyle(color: Color(0xFF2b38a4)),
-                        ),
-                      ),
-                    ],
-                  )
+                  textBtnLoginOrSignUp(() {
+                    Navigator.of(context).push(createRoute(const LoginPage()));
+                  }, isLoginMsg: true)
                 ],
               )
             ],
@@ -90,23 +68,4 @@ class OnboardingPage extends StatelessWidget {
       ),
     );
   }
-}
-
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) =>
-        const RegisterPage(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(1.0, 0.0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
 }
