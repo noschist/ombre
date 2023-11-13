@@ -13,8 +13,14 @@ OutlinedButton googleBtn(BuildContext context, {bool isLoginMsg = false}) {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10))),
       ),
-      onPressed: () {
-        context.read<AuthMethods>().signInWithGoogle(context);
+      onPressed: () async {
+        AuthStatRes res = await context
+            .read<AuthMethods>()
+            .signInWithGoogle(context: context);
+        if ((res == AuthStatRes.secretPend || res == AuthStatRes.success) &&
+            context.mounted) {
+          Navigator.of(context).pop();
+        }
       },
       child: Row(
         children: [

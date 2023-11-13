@@ -120,3 +120,4 @@ lib/generated_plugin_registrant.dart
 # Ignore all local history of files
 .history
 .ionide
+plans

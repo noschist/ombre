@@ -272,10 +272,16 @@ class _RegisterFormState extends State<RegisterForm> {
 
   void signUpUser() async {
     if (_registerFormKey.currentState!.validate()) {
-      context.read<AuthMethods>().signUpWithEmail(
+      AuthStatRes res = await context.read<AuthMethods>().signUpWithEmail(
+          userName: _nameEditController.text.trim(),
           email: _emailEditController.text.trim(),
           password: _passwordEditController.text.trim(),
           context: context);
+
+      if ((res == AuthStatRes.secretPend || res == AuthStatRes.success) &&
+          context.mounted) {
+        Navigator.of(context).pop();
+      }
     }
   }
 }

@@ -19,10 +19,12 @@ void showSnackBar(BuildContext context, String message, MessageType msgType) {
   } else {
     msgTitle = "Well done!";
   }
+  ScaffoldMessenger.of(context).removeCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     elevation: 0,
     backgroundColor: Colors.transparent,
     clipBehavior: Clip.none,
+    dismissDirection: DismissDirection.horizontal,
     content: Stack(
       children: [
         if (msgType == MessageType.info)

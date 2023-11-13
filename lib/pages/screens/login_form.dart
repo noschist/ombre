@@ -178,10 +178,14 @@ class _LoginFormState extends State<LoginForm> {
 
   void logInUser() async {
     if (_loginFormKey.currentState!.validate()) {
-      context.read<AuthMethods>().logInWithEmail(
+      AuthStatRes res = await context.read<AuthMethods>().logInWithEmail(
           email: _emailEditController.text.trim(),
           password: _passwordEditController.text.trim(),
           context: context);
+      if ((res == AuthStatRes.secretPend || res == AuthStatRes.success) &&
+          context.mounted) {
+        Navigator.of(context).pop();
+      }
     }
   }
 }
